@@ -37,7 +37,73 @@ I am using Cyclistic's 2014 datasets for this project.
 
 ### Data Preparation
 
+#### Excel Preparation
 EXPLAIN MY EXCEL PREP HERE...
+
+#### SQL Preparation
+
+I took the 12 Excel files that I converted from quarterly reports in .csv files and uploaded all 12 into BigQuery. I combined all 12 into one table as 'all_data_2014' with the following query.
+```
+CREATE TABLE IF NOT EXISTS `engaged-precept-376000.cyclistic_bike_data.all_data_2014` AS
+(
+  SELECT *
+FROM `engaged-precept-376000.cyclistic_bike_data.divvy_trips_2014_01`
+UNION ALL
+SELECT *
+FROM `engaged-precept-376000.cyclistic_bike_data.divvy_trips_2014_02`
+UNION ALL
+SELECT *
+FROM `engaged-precept-376000.cyclistic_bike_data.divvy_trips_2014_03`
+UNION ALL
+SELECT *
+FROM `engaged-precept-376000.cyclistic_bike_data.divvy_trips_2014_04`
+UNION ALL
+SELECT *
+FROM `engaged-precept-376000.cyclistic_bike_data.divvy_trips_2014_05`
+UNION ALL
+SELECT *
+FROM `engaged-precept-376000.cyclistic_bike_data.divvy_trips_2014_06`
+UNION ALL
+SELECT *
+FROM `engaged-precept-376000.cyclistic_bike_data.divvy_trips_2014_07`
+UNION ALL
+SELECT *
+FROM `engaged-precept-376000.cyclistic_bike_data.divvy_trips_2014_08`
+UNION ALL
+SELECT *
+FROM `engaged-precept-376000.cyclistic_bike_data.divvy_trips_2014_09`
+UNION ALL
+SELECT *
+FROM `engaged-precept-376000.cyclistic_bike_data.divvy_trips_2014_10`
+UNION ALL
+SELECT *
+FROM `engaged-precept-376000.cyclistic_bike_data.divvy_trips_2014_11`
+UNION ALL
+SELECT *
+FROM `engaged-precept-376000.cyclistic_bike_data.divvy_trips_2014_12`
+);
+```
+
+The new table has the following column names and datatypes:
+- trip_id - integer
+- starttime - timestamp
+- stoptime - timestamp
+- bikeid - integer
+- tripduration - integer
+- from_station_id - integer
+- from_station_name - string
+- to_station_id - integer
+- to_station_name - string
+- usertype - string
+- gender - string
+- birthyear - integer
+
+I ran the following query to see how many rows are in this dataset
+```
+SELECT COUNT(*)
+FROM `engaged-precept-376000.cyclistic_bike_data.all_data_2014`;
+```
+There are 2,454,634 total rows.
 
 
 
