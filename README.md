@@ -5,9 +5,8 @@
 ## Table of Contents
 - [Introduction](#introduction)
 - [Business Task](#business-task)
-- [Data](#data)
-- [Data Preparation](#data-preparation)
-- [Data Cleaning and Processing](#data-cleaning-and-processing)
+- [Tools](#tools)
+- [Data Cleaning and Processing](#data-processing-and-cleaning)
 - [Analysis and Visualizations](#analysis-and-visualizations)
 - [Recommendations](#recommendations)
 
@@ -35,12 +34,12 @@ I am using Cyclistic's 2014 datasets for this project.
 - SQL - BigQuery
 - [Tableau](https://public.tableau.com/views/2014CyclisticCapstoneProject/UsertypeCountandAvgRideLength?:language=en-US&:display_count=n&:origin=viz_share_link)
 
-### Data Preparation
+### Data Processing and Cleaning
 
 #### Excel Preparation
 EXPLAIN MY EXCEL PREP HERE...
 
-#### SQL Preparation
+#### SQL
 
 I took the 12 Excel files that I converted from quarterly reports in .csv files and uploaded all 12 into BigQuery. I combined all 12 into one table as 'all_data_2014' with the following query.
 ```
@@ -105,10 +104,101 @@ FROM `engaged-precept-376000.cyclistic_bike_data.all_data_2014`;
 ```
 There are 2,454,634 total rows.
 
+---
 
+I wanted to check for nulls in this dataset and used the following query:
+```
+SELECT COUNT(*) - COUNT(trip_id) AS trip_id,
+  COUNT(*) - COUNT(starttime) AS starttime,
+  COUNT(*) - COUNT(stoptime) AS starttime,
+  COUNT(*) - COUNT(bikeid) AS bikeid,
+  COUNT(*) - COUNT(tripduration) AS tripduration,
+  COUNT(*) - COUNT(from_station_id) AS from_station_id,
+  COUNT(*) - COUNT(from_station_name) AS from_station_name,
+  COUNT(*) - COUNT(to_station_id) AS to_station_id,
+  COUNT(*) - COUNT(to_station_name) AS to_station_name,
+  COUNT(*) - COUNT(usertype) AS usertype,
+  COUNT(*) - COUNT(gender) AS gender,
+  COUNT(*) - COUNT(birthyear) AS birthyear,
+FROM `engaged-precept-376000.cyclistic_bike_data.all_data_2014`
+```
+Only 2 columns had nulls:
+- gender had 791,280 null values.
+- birthyear had 791,216 null values.
 
-### Data Cleaning and Processing
+These will be removed later to not skew the data.
 
+---
+
+I wanted to create 4 new columns showing when each ride happened for the day of the week (1 is Sunday, 7 is Saturday), week of the year (between 1 and 52), month, and quarter. I ran the following query:
+```
+SELECT starttime,
+EXTRACT(DAYOFWEEK FROM starttime) AS day_of_week,
+EXTRACT(WEEK FROM starttime) AS week,
+EXTRACT(MONTH FROM starttime) AS month,
+EXTRACT(QUARTER FROM starttime) AS quarter,
+usertype
+FROM `engaged-precept-376000.cyclistic_bike_data.all_data_2014`
+```
+
+---
+
+I wanted to create a better column that showed ride_length because the tripduration column included in the original data showed it in seconds. I ran the following query to show ride_length in the hh:mm:ss format. I also removed any rides that are less than 1 minute and longer than 1,440 minutes/24 hours as they could also skew the data.
+```
+SELECT EXTRACT(TIME FROM starttime) AS starttime1,
+       EXTRACT(TIME FROM stoptime) AS stoptime1,
+       TIME_ADD(
+         TIME '0:0:0',
+         INTERVAL TIMESTAMP_DIFF(stoptime, starttime, SECOND) SECOND
+       ) AS ride_length
+   FROM `engaged-precept-376000.cyclistic_bike_data.all_data_2014`
+WHERE TIMESTAMP_DIFF(stoptime, starttime, SECOND) > 1
+AND TIMESTAMP_DIFF(stoptime, starttime, SECOND) < 1440;
+```
+
+---
+
+Lastly, I created a new table 'cleaned_all_data_2014' to include:
+- ride_length column in hh:mm:ss format
+- day_of_week column
+- week column
+- month column
+- quarter column
+
+This table also removes:
+- Null values in the gender and birthyear columns
+- Any rides less than 1 minute and longer than 24 hours
+
+```
+CREATE TABLE IF NOT EXISTS `engaged-precept-376000.cyclistic_bike_data.cleaned_all_data_2014` AS
+(
+  SELECT trip_id
+  , starttime
+  , stoptime
+  , tripduration
+  , TIME_ADD(
+         TIME '0:0:0',
+         INTERVAL TIMESTAMP_DIFF(stoptime, starttime, SECOND) SECOND
+       ) AS ride_length
+  , from_station_id
+  , from_station_name
+  , to_station_id
+  , to_station_name
+  , usertype
+  , gender
+  , birthyear
+  , EXTRACT(DAYOFWEEK FROM starttime) AS day_of_week
+  , EXTRACT(WEEK FROM starttime) AS week
+  , EXTRACT(MONTH FROM starttime) AS month
+  , EXTRACT(QUARTER FROM starttime) AS quarter
+FROM `engaged-precept-376000.cyclistic_bike_data.all_data_2014`
+WHERE
+  gender IS NOT NULL
+  AND birthyear IS NOT NULL
+  AND TIMESTAMP_DIFF(stoptime, starttime, SECOND) > 1
+  AND TIMESTAMP_DIFF(stoptime, starttime, SECOND) < 1440
+);
+```
 
 ### Analysis and Visualizations
 
