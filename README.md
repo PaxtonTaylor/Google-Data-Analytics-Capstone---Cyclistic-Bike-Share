@@ -9,6 +9,7 @@
 - [Data Cleaning and Processing](#data-processing-and-cleaning)
 - [Analysis and Visualizations](#analysis-and-visualizations)
 - [Recommendations](#recommendations)
+- [Limitiations](#limitations)
 
   
 ### Introduction
@@ -17,7 +18,7 @@ This is the Capstone project for the Google Data Analytics Certifcate through Co
 
 I am a junior data analyst on the marketing analyst team. My manager, Lily Moreno, believes the company’s future success depends on maximizing the number of annual memberships. Until now, Cyclistic’s marketing strategy relied on building general awareness and appealing to broad consumer segments. Cyclistic's finance analysts have concluded that annual members are much more profitable than casual riders. Although the pricing flexibility helps Cyclistic attract more customers, Moreno believes that maximizing the number of annual members will be key to future growth. Rather than creating a marketing campaign that targets all-new customers, Moreno believes there is a very good chance to convert casual riders into members. She notes that casual riders are already aware of the Cyclistic program and have chosen us for their mobility needs.
 
-Cyclistic offers 3 different passes - single-ride passes, full-day passes, and annual memberships. There are two types of users. Users who purchase single-ride and full-day passes are **Customers**. Users who have annual memberships are **Subscribers**. The bikes can be unlocked from one station and returned to any other station in the system anytime.
+Cyclistic offers 3 different passes - single-ride passes, full-day passes, and annual memberships. There are two types of users. Users who purchase single-ride and full-day passes are **Customers**. Users who have annual memberships are **Subscribers**. The bikes can be unlocked from one station and returned to any other station in the system at anytime.
 
 ### Business Task
 How do Customers and Subscribers use Cyclistic bikes differently?
@@ -36,8 +37,9 @@ I am using Cyclistic's 2014 datasets for this project.
 
 ### Data Processing and Cleaning
 
-#### Excel Preparation
-EXPLAIN MY EXCEL PREP HERE...
+#### Excel
+I downloaded the original quarter 1 through 4 .xlsx files and turned them into monthly .csv files. This makes uploading into BigQuery simplier and also makes it easier to work with in Excel and in SQL.
+
 
 #### SQL
 
@@ -106,6 +108,15 @@ There are 2,454,634 total rows.
 
 ---
 
+To explore this data table more, I ran the following query to find the average ride length
+```
+SELECT AVG(stoptime - starttime) AS avg_ride_length
+FROM `engaged-precept-376000.cyclistic_bike_data.all_data_2014`;
+```
+I got the result 0-0 0 0:17:4.941828394, meaning the average ride length for all of 2014 is 17 minutes and 5 secs. I don't like this format because it's too messy to work with since it shows month, day, year and the seconds with 9 decimals. I will format this later to show times in hh:mm:ss format.
+
+---
+
 I wanted to check for nulls in this dataset and used the following query:
 ```
 SELECT COUNT(*) - COUNT(trip_id) AS trip_id,
@@ -166,8 +177,9 @@ Lastly, I created a new table 'cleaned_all_data_2014' to include:
 - quarter column
 
 This table also removes:
-- Null values in the gender and birthyear columns
 - Any rides less than 1 minute and longer than 24 hours
+
+Originally, I wanted to remove all rows that had nulls in the gender and birthyear columns. After further analysis, I found that only 49 Customers had values for both gender and birthyear skewing the data to show only data for Subscribers. I added birthyear and gender back to this table and will discuss this more later.
 
 ```
 CREATE TABLE IF NOT EXISTS `engaged-precept-376000.cyclistic_bike_data.cleaned_all_data_2014` AS
@@ -192,31 +204,59 @@ CREATE TABLE IF NOT EXISTS `engaged-precept-376000.cyclistic_bike_data.cleaned_a
   , EXTRACT(MONTH FROM starttime) AS month
   , EXTRACT(QUARTER FROM starttime) AS quarter
 FROM `engaged-precept-376000.cyclistic_bike_data.all_data_2014`
-WHERE
-  gender IS NOT NULL
-  AND birthyear IS NOT NULL
-  AND TIMESTAMP_DIFF(stoptime, starttime, SECOND) > 1
+WHERE TIMESTAMP_DIFF(stoptime, starttime, SECOND) > 1
   AND TIMESTAMP_DIFF(stoptime, starttime, SECOND) < 1440
 );
 ```
+Total number of rows in original data = 2,454,634.
+
+Total number of rows in cleaned data = 2,010,065.
+
 
 ### Analysis and Visualizations
 
-User Count, User Percentage, and Average Ride Length by User
+The original Tableau dashboard is interactive where we can filter each chart between all users, Customers, or Subscribers. My points for each include analysis using these filters.
+
+#### User Count, User Percentage, and Average Ride Length by User
 
 <img width="744" alt="Usertype Count, %, and Avg Ride Length" src="https://github.com/PaxtonTaylor/Google-Data-Analytics-Capstone---Cyclistic-Bike-Share/assets/147224800/2bf89973-68eb-451a-bca2-36dcdffcd336">
 
-Day of the Week
+- We had 2,010,065 total rides in 2014.
+- A majority of our users are Subscribers at 77%.
+- Customers are almost 23% of our annual users.
+- Customers have a longer average ride length by 4 and a half minutes.
+
+
+#### Day of the Week
 
 <img width="739" alt="Day of Week" src="https://github.com/PaxtonTaylor/Google-Data-Analytics-Capstone---Cyclistic-Bike-Share/assets/147224800/1b906f85-fc27-4b4c-a2e2-4be3e7809f37">
 
-Total Rides by Hour
+Total Rides
+- Subscribers ride more frequently during the week peaking on Wednesdays, likely using our service to commute to/from work and run errands.
+- Customers ride more on weekends peaking on Saturdays.
+- Friday is the busiest day for all users, which is likely due to Friday being the end of the work week for Subscribers and beginning of the weekend for Customers.
+
+Average Ride Length
+
+- Customers have a longer average ride length of 14 minutes and their longest average rides on Sundays with 14 minutes, 45 seconds. This is likely due to them exploring the city more leisurely.
+- Subscribers have an average ride length of 10 minutes and their longest average rides on Sundays with 10 minutes, 28 seconds. They are likely using our bikes for intentional tasks like commuting to/from work, running errands, dining, etc.
+
+#### Total Rides by Hour
 
 <img width="743" alt="Total Rides by Hour" src="https://github.com/PaxtonTaylor/Google-Data-Analytics-Capstone---Cyclistic-Bike-Share/assets/147224800/bcefad8c-6ce1-44d8-a16b-c9c39b071546">
 
-Total Rides by Month
+- Late afternoon is the busiest time to begin rides with 5pm being the most popular start time.
+- Subscribers most popular start times are 5pm followed by 8am, which lines up with work commute hours.
+- Customers most popular start times are 4pm followed by 5pm, but there is a consistently heavy use all afternoon between noon and 5pm.
+
+#### Total Rides by Month
 
 <img width="745" alt="Total Rides by Month" src="https://github.com/PaxtonTaylor/Google-Data-Analytics-Capstone---Cyclistic-Bike-Share/assets/147224800/c156a9ad-eeb7-4674-8ac0-f96a7f2e87db">
+
+- Summer is the busiest season with July being our busiest month.
+- Subscribers have a longer high volume usage between May and October, with July being their busiest month.
+- Customers are most active during the Summer between June and August, with Augest being their busiest month.
+- Weather plays an important role in both memberships. Since Summer is sunnier, warmer, and people tend to be more active compared to Winter when it's colder and the days are shorter.
 
 
 ### Recommendations
@@ -225,3 +265,16 @@ Cyclistic Highlights
 
 <img width="722" alt="Cyclistic Highlights" src="https://github.com/PaxtonTaylor/Google-Data-Analytics-Capstone---Cyclistic-Bike-Share/assets/147224800/f9e1a377-6e53-405d-a2d1-5f21680710af">
 
+- Since our busiest season is summer, we could begin aggressively marketing to our casual customers in either April or May by offering a slightly discounted subscriber plan so they can experience the benefit during those peak months.
+
+- Since most Customers ride more on weekends, we can market that if they switch to Subscribers they can still ride during the weekends for leasure, but can also use our bikes for more daily routines such as work commute and other daily tasks.
+
+- To help incentivize Customers converting to Subscribers, we could offer more memberships options. If we added a monthly subscription option, a quarterly subscription, and kept the annual subscription, we could likely convince more Customers to become Subscribers. Pricing could push for cheaper prices for the longer subscriptions in the long run making our annual subscription the most expensive up front but cheapest long term.
+
+- We could place ads throughout the city in newspapers, TV ads, billboards, magazines, and even throughout the airport as tourists enter the city or residents return home to spread more awareness of our service, especially before our peak Summer season.
+
+### Limitations
+
+To better analyze this data, the following points would make an impact:
+- Gender and birth year information for Customers. We only have 49 Customers that filled out that information initially. We could have more marketing options to convert Subscribers to Customers with this information.
+- If we had data on which bikes users chose to ride, we could work to improve the less used bikes and promote our popular bikes more with marketing.
