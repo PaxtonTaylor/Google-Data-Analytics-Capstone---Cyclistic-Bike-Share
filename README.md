@@ -44,21 +44,6 @@ I processed and cleaned data in both Excel and SQL (BigQuery). You can click on 
 The original Tableau dashboard is interactive where we can filter each chart between all users, Customers, or Subscribers. My points for each include analysis using these filters.
 You can click on the corresponding link to view screenshots and explanations of my analysis from Tableau.
 
-### Recommendations
-
-Cyclistic Highlights
-
-<img width="722" alt="Cyclistic Highlights" src="https://github.com/PaxtonTaylor/Google-Data-Analytics-Capstone---Cyclistic-Bike-Share/assets/147224800/f9e1a377-6e53-405d-a2d1-5f21680710af">
-
-- Since our busiest season is summer, we could begin aggressively marketing to our casual customers in either April or May by offering a slightly discounted subscriber plan so they can experience the benefit during those peak months.
-
-- Since most Customers ride more on weekends, we can market that if they switch to Subscribers they can still ride during the weekends for leasure, but can also use our bikes for more daily routines such as work commute and other daily tasks.
-
-- To help incentivize Customers converting to Subscribers, we could offer more memberships options. If we added a monthly subscription option, a quarterly subscription, and kept the annual subscription, we could likely convince more Customers to become Subscribers. Pricing could push for cheaper prices for the longer subscriptions in the long run making our annual subscription the most expensive up front but cheapest long term.
-
-- We could place ads throughout the city in newspapers, TV ads, billboards, magazines, and even throughout the airport as tourists enter the city or residents return home to spread more awareness of our service, especially before our peak Summer season.
-
-
 
 ### Limitations
 
