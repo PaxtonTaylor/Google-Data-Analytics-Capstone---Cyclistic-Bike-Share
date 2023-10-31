@@ -6,8 +6,6 @@ Added ride_length column with =C2-B2, where =stoptime - starttime to calculate t
 
 <img width="200" alt="ride_length" src="https://github.com/PaxtonTaylor/Google-Data-Analytics-Capstone---Cyclistic-Bike-Share/assets/147224800/67afe1b0-f916-4782-bb0d-da4bfb238a13">
 
-![ride_length]<img width="200" alt="ride_length" src="https://github.com/PaxtonTaylor/Google-Data-Analytics-Capstone---Cyclistic-Bike-Share/assets/147224800/8b7871da-3ccf-4e1d-bac9-a62013130fc7">
-
 Added day_of_week column with function =WEEKDAY(B2, 1), where B2 is starttime and 1 tells it to label 1 as Sunday, 2 as Monday,... 7 is Saturday.
 
 
