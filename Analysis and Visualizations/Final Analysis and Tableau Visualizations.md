@@ -1,6 +1,6 @@
 # Analysis and Visualizations
 
-My original [Tableau dashboard](https://public.tableau.com/app/profile/paxton2033/viz/2014CyclisticCapstoneProject/CyclisticHighlights#guest=n) is interactive where we can filter each chart between all users, Customers, or Subscribers. My points for each include analysis using these filters.
+My original [Tableau dashboard](https://public.tableau.com/app/profile/paxton2033/viz/2014CyclisticCapstoneProject/CyclisticHighlights#guest=n) is interactive where we can filter each chart between all users, Customers, or Subscribers. Throughout this portion, I will reference observations made adjusting these filters to each slide of this dashboard.
 
 #### User Count, User Percentage, and Average Ride Length by User
 
@@ -24,7 +24,7 @@ Total Rides
 Average Ride Length
 
 - Customers have a longer average ride length of 14 minutes and their longest average rides are on Sundays with 14 minutes, 45 seconds. This is likely due to them exploring the city more leisurely.
-- Subscribers have an average ride length of 10 minutes and their longest average rides are on Sundays with 10 minutes, 28 seconds. They are likely using our bikes for intentional tasks like commuting to/from work, running errands, dining, etc.
+- Subscribers have an average ride length of 10 minutes and their longest average rides are on Sundays with 10 minutes, 28 seconds. They are likely using our bikes for everyday tasks like commuting to/from work, running errands, dining, etc.
 
 #### Total Rides by Hour
 
@@ -41,20 +41,19 @@ Average Ride Length
 - Summer is the busiest season with July being our busiest month.
 - Subscribers have a longer high volume usage between May and October, with July being their busiest month.
 - Customers are most active during the Summer between June and August, with Augest being their busiest month.
-- Weather plays an important role in both memberships. Since Summer is sunnier, warmer, and people tend to be more active compared to Winter when it's colder and the days are shorter.
+- Weather plays an important role in both membership types. Since Summer is sunnier, warmer, and people tend to be more active compared to Winter when it's colder and the days are shorter.
 
 
 ### Recommendations
 
-Cyclistic Highlights
+#### Cyclistic Highlights
 
 <img width="722" alt="Cyclistic Highlights" src="https://github.com/PaxtonTaylor/Google-Data-Analytics-Capstone---Cyclistic-Bike-Share/assets/147224800/f9e1a377-6e53-405d-a2d1-5f21680710af">
 
-- Since our busiest season is summer, we could begin aggressively marketing to our casual customers in either April or May by offering a slightly discounted subscriber plan so they can experience the benefit during those peak months.
+- Since our busiest season is summer, we could begin aggressively marketing to our casual customers in either April or May by offering a slightly discounted Subscriber plan so they can experience the benefit during those peak months.
 
-- Since most Customers ride more on weekends, we can market that if they switch to Subscribers they can still ride during the weekends for leasure, but can also use our bikes for more daily routines such as work commute and other daily tasks.
+- Since most Customers ride more on weekends, we can push the idea that if they switch to Subscribers they can still ride during the weekends for leasure, but can also use our bikes for more daily routines such as work commute and other daily tasks.
 
-- To help incentivize Customers converting to Subscribers, we could offer more memberships options. If we added a monthly subscription option, a quarterly subscription, and kept the annual subscription, we could likely convince more Customers to become Subscribers. Pricing could push for cheaper prices for the longer subscriptions in the long run making our annual subscription the most expensive up front but cheapest long term.
+- To help incentivize Customers converting to Subscribers, we could offer more memberships options. We could add a monthly subscription option, a quarterly subscription, and keet the annual subscription, we could likely convince more Customers to become Subscribers. Pricing could push for cheaper prices for the longer subscriptions so that they could be encouraged to purchase the annual, quarterly, and monthly plans to like save more money than x amount of single use or full day options.
 
 - We could place ads throughout the city in newspapers, TV ads, billboards, magazines, and even throughout the airport as tourists enter the city or residents return home to spread more awareness of our service, especially before our peak Summer season.
-
