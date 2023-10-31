@@ -4,7 +4,8 @@ I downloaded the original quarter 1 through 4 .xlsx files and turned them into m
 
 Added ride_length column with =C2-B2, where =stoptime - starttime to calculate the ride length of each ride.
 
-[Model](https://github.com/PaxtonTaylor/Google-Data-Analytics-Capstone---Cyclistic-Bike-Share/blob/main/Cyclistic%20Images/ride_length.png)
+<img width="200" alt="ride_length" src="https://github.com/PaxtonTaylor/Google-Data-Analytics-Capstone---Cyclistic-Bike-Share/assets/147224800/67afe1b0-f916-4782-bb0d-da4bfb238a13">
+
 
 Added day_of_week column with function =WEEKDAY(B2, 1), where B2 is starttime and 1 tells it to label 1 as Sunday, 2 as Monday,... 7 is Saturday.
 
